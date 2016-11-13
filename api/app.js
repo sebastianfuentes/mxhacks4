@@ -26,6 +26,8 @@ router.get('/', function(req, res) {
  res.send("LUIGIS");
 });
 
+app.use(router);
+
 // API routes
 var api = express.Router();
 

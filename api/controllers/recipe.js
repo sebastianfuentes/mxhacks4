@@ -22,7 +22,7 @@ exports.findById = function(req, res) {
 //POST - Insert a new register
 exports.add = function(req, res) {
  console.log('POST');
- console.log(req.body);
+ console.log('req.body '+req.body.name);
  var recipe = new Recipe({
  name: req.body.name,
  info: req.body.info,
@@ -31,6 +31,7 @@ exports.add = function(req, res) {
  image_link: req.body.image_link
  });
  recipe.save(function(err, recipe) {
+   console.log(recipe)
  if(err) return res.send(500, err.message);
  res.status(200).jsonp(recipe);
  });
