@@ -1,0 +1,8 @@
+{
+  "name": "Testbot",
+  "description": "Testbot Example",
+  "repository": "https://github.com/dannyweapons/Chefcito",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"],
+  "image": "heroku/nodejs"
+}

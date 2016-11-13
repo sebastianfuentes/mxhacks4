@@ -1,0 +1,6 @@
+{
+    "appSecret": "777c5922ad80239472da863282c04670",
+    "pageAccessToken": "EAAUYvzSQJr8BAKywzn2G877ZCHiVrh231aZAqtrSjOqNqVz31Wzq0eGyOwc5a0SnrMjZAtyYkVOBVwL7v8m4NPCGTqyKf2EtpVhbS1TnTUWDStQWpPtIvJvaSZBxXdlxY9dxeqd2WiVRKOGFxaMySTXGJgyxSuGYsQsKeNL4EwZDZD",
+    "validationToken": "my_voice_is_my_password_verify_me",
+    "serverURL": "https://obscure-hamlet-38286.herokuapp.com/"
+}
