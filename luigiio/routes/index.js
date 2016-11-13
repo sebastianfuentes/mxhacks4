@@ -15,6 +15,7 @@ router.get('/analysis', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
 router.get('/recipe', function(req, res, next) {
 	query.findAll(req,res);
 });
