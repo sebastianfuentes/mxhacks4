@@ -5,10 +5,14 @@
  *
  * Made By MaterializeCSS.com
  */
+.logo{
+    font-family: 'Tangerine', cursive;
+    font-size: 200px;
+}
 
 /*User's css*/
 .parallax-container {
-      height: 900px !important;
+      height: 740px !important;
     }
 
 /*User's css*/
