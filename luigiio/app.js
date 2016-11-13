@@ -31,7 +31,7 @@ app.use('/users', users);
 
 
 var models = require('./models/recipe')(app, mongoose);
-var RecipeCtrl = require('./controllers/recipe');
+var RecipeCtrl = require('./models/query');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

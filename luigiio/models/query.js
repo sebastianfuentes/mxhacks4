@@ -29,6 +29,7 @@ exports.findById = function(req, res) {
 exports.findRecipesWith = function(ingridients){
   let recipes = []
   for(let ingridient of ingridients){
+    console.log(ingridient);
     model.find({ingridients: [ingridient]}, (err, queryObj) => {
       if(err || !queryObj)
         console.log('test');

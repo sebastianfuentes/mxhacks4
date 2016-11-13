@@ -26,14 +26,8 @@ var Vision = require('@google-cloud/vision');
 
 // Instantiate a vision client
 var vision = Vision();
-var mongoose = require('mongoose');
+var db = require('../models/query');
 
-mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  
-});
 // [END authenticate]
 
 /**
@@ -41,12 +35,18 @@ db.once('open', function() {
  */
 // [START construct_request]
 function detectLabels (inputFile, callback) {
+  let ingredients = [];
   // Make a call to the Vision API to detect the labels
   vision.detectLabels(inputFile, { verbose: true }, function (err, labels) {
     if (err) {
       return callback(err);
     }
-    console.log('result:', JSON.stringify(labels, null, 2));
+    // console.log(JSON.stringify(labels, null, 2));
+    // console.log(labels);
+    for (let label of labels){
+      ingredients.push(label.desc);
+    }
+    db.findRecipesWith(ingredients);
     callback(null, labels);
   });
 }
@@ -58,10 +58,7 @@ function main (inputFile, req, res, next, callback) {
     if (err) {
       return callback(err);
     }
-    // [START parse_response]
-    console.log('Found label: ' + labels[0].desc + ' for ' + inputFile);
-    // [END parse_response]
-    callback(null, labels);
+    // console.log(labels);
   });
   return next();
 }
