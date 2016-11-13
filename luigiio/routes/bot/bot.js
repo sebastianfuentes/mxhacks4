@@ -18,6 +18,8 @@ const crypto = require('crypto');
 const express = require('express');
 const fetch = require('node-fetch');
 const request = require('request');
+var http = require('http')
+var fs = require('fs');
 
 let Wit = null;
 let log = null;
@@ -200,8 +202,12 @@ app.post('/webhook', (req, res) => {
           if (attachments) {
             // We received an attachment
             // Let's reply with an automatic message
-            fbMessage(sender, 'Sorry I can only process text messages for now.')
-            .catch(console.error);
+            //fbMessage(sender, 'Sorry I can only process text messages for now.')
+            //.catch(console.error);
+            var attachment = attachments[0]
+            var attachmentUrl = attachment.payload.url;
+            console.log("Received Attachment");
+            download(attachmentUrl);
           } else if (text) {
             // We received a text message
 
@@ -267,6 +273,42 @@ function verifyRequestSignature(req, res, buf) {
       throw new Error("Couldn't validate the request signature.");
     }
   }
+}
+
+
+function download(link) {
+
+  var request = http.get(link, function(res){
+    const statusCode = res.statusCode;
+      if (statusCode !== 200) {
+        var error = new Error(`Request Failed.\n` +
+                          `Status Code: ${statusCode}`);
+      } else if (!/^image\/jpeg/.test()) {
+        var error = new Error(`Invalid content-type.\n` +
+                          `Expected image/jpeg but received ${res.contentType}`);
+      }
+      if (error) {
+        console.log(error.message);
+        // consume response data to free up memory
+        res.resume();
+        return;
+      }
+
+      var imagedata = ''
+      res.setEncoding('binary')
+
+      res.on('data', function(chunk){
+          imagedata += chunk
+      })
+
+      res.on('end', function(){
+          fs.writeFile('../../resources/img/list.jpg', imagedata, 'binary', function(err){
+              if (err) throw err
+              console.log('File saved.')
+          })
+      })
+
+  })
 }
 
 app.listen(PORT);
