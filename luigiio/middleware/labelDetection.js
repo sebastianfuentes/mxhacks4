@@ -16,6 +16,7 @@
 // [START app]
 // [START import_libraries]
 var Vision = require('@google-cloud/vision');
+
 // [END import_libraries]
 
 // [START authenticate]
@@ -26,7 +27,6 @@ var Vision = require('@google-cloud/vision');
 
 // Instantiate a vision client
 var vision = Vision();
-var db = require('../models/query');
 
 // [END authenticate]
 
@@ -65,6 +65,6 @@ function main (inputFile, req, res, next, callback) {
 
 exports.main = main;
 
-exports.analyse = function(file, req, res, next){
+exports.analyse = (file, req, res, next)=>{
   main(file, req, res, next, console.log);
 }
