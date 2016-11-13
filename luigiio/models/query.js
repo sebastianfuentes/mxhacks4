@@ -1,69 +1,69 @@
-"use strict";
+'use strict';
 
-var mongoose = require('../conf/database');
+var mongoose = require('./recipe');
+var Recipe = mongoose.model('Recipe');
 var _ = require("lodash");
 
-var querySchema = mongoose.Schema({
-  name: String,
-  ingridients: [String]
-});
-
-var model = mongoose.model('query', querySchema);
-
-exports.findAll = function(req, res) {
-  Recipe.find(function(err, recipes) {
-  if(err) res.send(500, err.message);
-  console.log('GET /recipes')
-  res.status(200).jsonp(recipes);
+exports.findAll = (req, res, next)=> {
+  Recipe.find((err, recipes)=> {
+    if(err) res.send(500, err.message);
+    if(res.status(200))
+      res.status(200).jsonp(recipes);
+    else
+      res.send(recipes)
   });
 };
 
-exports.findById = function(req, res) {
-  Recipe.findById(req.params.id, function(err, recipe) {
-    if(err) return res.send(500, err.message);
-      console.log('GET /recipes/' + req.params.id);
+exports.findById = (req, res)=> {
+  Recipe.findById(req.params.id, (err, recipe)=> {
+    if(err) return res.send(500, err.message);ß
+    console.log('GET /recipes/' + req.params.id);
     res.status(200).jsonp(recipe);
   });
 };
 
-exports.findRecipesWith = function(ingridients){
-  let recipes = []
-  for(let ingridient of ingridients){
-    console.log(ingridient);
-    model.find({ingridients: [ingridient]}, (err, queryObj) => {
-      if(err || !queryObj)
-        console.log('test');
-      else
-        recipes.push(queryObj)
-        console.log(queryObj);
-    });
-  }
-  recipes = _.uniqBy(recipes, "_id");
-  return recipes.map((i, e) => {
-    let recipe = e;
-    let ocurrences;
-    for(ingridient of ingridients){
-      if (e.indexOf(ingridient) != -1) {
-        ocurrences++;
-      }
-    }
-    recipe.ocurrences = ocurrences;
-    return recipe;
+exports.findRecipesWith = (req,res)=>{
+  let ingridients = req.query.ingridients.split(',');
+  var recipes;
+  Recipe.find({ingredients: { $in: ingridients }}, (err, queryObj) => {
+    if(err || !queryObj)
+      console.log(err);
+    else 
+      exports.sortByOcurrence(res, queryObj, ingridients);
   });
 };
 
-exports.add = function(req, res) {
-    console.log('POST');
-    var recipe = new Recipe({
+exports.sortByOcurrence = (res, recipes, ingredients)=>{
+  recipes = recipes.map((e,i) => {
+    var recipe = e;
+    var ocurrences = 0;
+    for(var ingredient of ingredients){
+      if (e.ingredients.indexOf(ingredient) != -1) {
+        ocurrences++;
+        console.log(ocurrences);
+      }
+    }
+    recipe["ocurrences"] = ocurrences;
+    console.log(recipe);
+    return recipe;
+  });
+  res.status(200).jsonp(recipes);
+}
+
+exports.add = (req, res)=> {
+  var recipe = new Recipe({
     name: req.body.name,
     info: req.body.info,
     ingredients: req.body.ingredients,
     instructions: req.body.instructions,
     image_link: req.body.image_link
   });
-  recipe.save(function(err, recipe) {
+  recipe.save(function(err) {
     if(err) return res.send(500, err.message);
     res.status(200).jsonp(recipe);
+  });
+  Recipe.find((err,recipes)=>{
+    console.log(recipes);
   });
 };
 

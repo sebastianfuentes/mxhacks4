@@ -43,6 +43,6 @@ api.route('/recipes/:id')
 app.use('/api', api);
 
 // Start server
-app.listen(3000, function() {
+app.listen(4000, function() {
  console.log("Node server running on http://localhost:3000");
 });
