@@ -1,50 +1,52 @@
 "use strict";
 
 var mongoose = require('../conf/database');
-var querySchema = mongoose.Schema({
+var _ = require("lodash");
 
+var querySchema = mongoose.Schema({
   name: String,
   ingridients: [String]
 });
 
 var model = mongoose.model('query', querySchema);
 
-function getUniques(base, reference){
-  let uniques = [];
-  for(let x of base){
-    if(reference.indexOf(x) == -1 && uniques.indexOf(x) == -1)
-      uniques.push(x);
-  }
-  return uniques;
-}
+exports.findAll = function(req, res) {
+  Recipe.find(function(err, recipes) {
+  if(err) res.send(500, err.message);
+  console.log('GET /recipes')
+  res.status(200).jsonp(recipes);
+  });
+};
 
-exports.updateStreams = function(streamId, previousString, newString){
-  let previous = previousString.split(',');
-  let news = newString.split(',');
+exports.findById = function(req, res) {
+  Recipe.findById(req.params.id, function(err, recipe) {
+    if(err) return res.send(500, err.message);
+      console.log('GET /recipes/' + req.params.id);
+    res.status(200).jsonp(recipe);
+  });
+};
 
-  let toDelete = getUniques(previous, news);
-  let toAdd = getUniques(news, previous);
-
-  for(let query of toDelete) {
-    model.update(
-      {query: query},
-      {$pull: {streams: streamId}},
-      {multi: false},
-      (res, lol)=> {
-        console.log(res, lol);
-      }
-    );
-  }
-  for(let query of toAdd){
-    model.findOne({query: query}, (err, queryObj)=> {
-      var updateQuery;
+exports.findRecipesWith = function(ingridients){
+  let recipes = []
+  for(let ingridient of ingridients){
+    model.find({ingridients: [ingridient]}, (err, queryObj)=> {
       if(err || !queryObj)
-        updateQuery = model({query: query});
+        console.log('test');
       else
-        updateQuery = queryObj;
-      
-      updateQuery.streams.push(streamId);
-      updateQuery.save();
+        recipes.push(queryObj)
+        console.log(queryObj);
     });
   }
+  recipes = _.uniqBy(recipes, "_id");
+  return recipes.map((i, e) => {
+    let recipe = e;
+    let ocurrences;
+    for(ingridient of ingridients){
+      if (e.indexOf(ingridient) != -1) {
+        ocurrences++;
+      }
+    }
+    recipe.ocurrences = ocurrences;
+    return recipe;
+  });
 };
