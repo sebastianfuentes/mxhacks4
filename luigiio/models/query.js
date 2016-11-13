@@ -23,18 +23,18 @@ exports.findById = (req, res)=> {
 };
 
 exports.findRecipesWith = (req,res)=>{
-  let ingridients = req.query.ingridients.split(',');
+  let ingredients = req.query.ingredients.split(',');
   var recipes;
-  Recipe.find({ingredients: { $in: ingridients }}, (err, queryObj) => {
+  Recipe.find({ingredients: { $in: ingredients }}, (err, queryObj) => {
     if(err || !queryObj)
       console.log(err);
     else 
-      exports.sortByOcurrence(res, queryObj, ingridients);
+      exports.sortByOcurrence(res, queryObj, ingredients);
   });
 };
 
 exports.sortByOcurrence = (res, recipes, ingredients)=>{
-  recipes = recipes.map((e,i) => {
+  let sortedRecipes = recipes.map((e,i) => {
     var recipe = e;
     var ocurrences = 0;
     for(var ingredient of ingredients){
@@ -43,7 +43,7 @@ exports.sortByOcurrence = (res, recipes, ingredients)=>{
         console.log(ocurrences);
       }
     }
-    recipe["ocurrences"] = ocurrences;
+    sortedRecipes = ocurrences;
     console.log(recipe);
     return recipe;
   });
