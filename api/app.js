@@ -38,7 +38,7 @@ api.route('/recipes/:id')
  .put(RecipeCtrl.update)
  .delete(RecipeCtrl.delete);
 
-app.use(router);
+app.use('/api', api);
 
 // Start server
 app.listen(3000, function() {

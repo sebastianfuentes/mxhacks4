@@ -1,0 +1,12 @@
+Method: POST
+
+URL: http://localhost:3000/api/recipes
+
+Body,raw:
+{
+  "name": "TESTSTSTST",
+  "info": "TESTSTSTST",
+  "ingredients": "TESTSTSTST",
+  "instructions": "TESTSTSTST",
+  "image_link": "TESTSTSTST"
+}
