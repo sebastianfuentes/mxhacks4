@@ -5,7 +5,7 @@ var analyse = require("../middleware/labelDetection");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	// analyse.analyse("resources/img/onion.jpg", req, res, next);
+	analyse.analyse("resources/img/onion.jpg", req, res, next);
   res.render('index', { title: 'Express' });
 });
 

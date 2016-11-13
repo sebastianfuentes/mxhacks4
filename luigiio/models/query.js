@@ -3,11 +3,8 @@
 var mongoose = require('../conf/database');
 var querySchema = mongoose.Schema({
 
-  creationDate: {type: Date, default: Date.now},
-
-  query: String,
-  streams: []
-  //streamType: String
+  name: String,
+  ingridients: [String]
 });
 
 var model = mongoose.model('query', querySchema);

@@ -1,5 +1,25 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+        #index-banner.parallax-container.valign-wrapper
+          .section.no-pad-bot
+            .container
+              br
+              br
+              h1.header.center
+                valign-wrapper.logo 
+                    b Alimenta.me
+              .row.center
+                h5.header.col.s12.light Descubre lo puedes cocinar, con lo que creias que no se puede cocinar nada.
+              .row.center
+                a#download-button.btn-large.waves-effect.waves-light.deep-orange.darken-1(href='http://materializecss.com/getting-started.html') ¡Sorprendeme!
+              br
+              br
+          .parallax
+            img(src='/images/index.jpg', alt='Unsplashed background img 1')
+        // Scripts
+        script(src='https://code.jquery.com/jquery-2.1.1.min.js')
+        script(src='js/materialize.js')
+        script(src='js/init.js')
+
+
